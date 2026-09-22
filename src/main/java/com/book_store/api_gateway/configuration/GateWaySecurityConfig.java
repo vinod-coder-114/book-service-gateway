@@ -18,7 +18,7 @@ public class GateWaySecurityConfig {
                         .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .pathMatchers("/book-store/api/user/register",
                                 "/book-store/api/user/login",
-                                "/actuator/**"
+                                "/actuator/**", "/book-store/api/catalog/books/**", "/book-store/api/catalog/books/*/images/**"
                         ).permitAll()
                         .anyExchange().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))

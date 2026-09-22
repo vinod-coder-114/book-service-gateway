@@ -12,16 +12,23 @@ spring:
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
           routes:
             - id: user-service
-              uri: ${USER_SERVICE_URL:http://localhost:8081}
+              uri: ${USER_SERVICE_URL:http://user-service:8081}
               predicates:
                 - Path=/book-store/api/user/**
               filters:
                 - RewritePath=/book-store/(?<segment>.*), /$\{segment}
+            - id: catalog-service
+              uri: ${CATALOG_SERVICE_URL:http://catalog-service:8082}
+              predicates:
+                  - Path=/book-store/api/catalog/**
+              filters:
+                  -  RewritePath=/book-store/(?<segment>.*), /$\{segment}
+
   security:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: http://localhost:8081/.well-known/jwks.json
+          jwk-set-uri: http://user-service:8081/.well-known/jwks.json
 
 app:
   cors:
@@ -38,6 +45,6 @@ app:
       - "*"
     exposed-headers:
       - Location
+      - X-Correlation-Id
     allow-credentials: false
     max-age: PT30M
-

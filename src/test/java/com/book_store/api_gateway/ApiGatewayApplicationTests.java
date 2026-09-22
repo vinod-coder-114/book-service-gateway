@@ -1,5 +1,7 @@
 package com.book_store.api_gateway;
 
+import static com.book_store.api_gateway.filter.CorrelationLoggingWebFilter.CORRELATION_ID_HEADER;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -57,7 +59,8 @@ class ApiGatewayApplicationTests {
 			.expectStatus().is2xxSuccessful()
 			.expectHeader().valueEquals(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, TEST_ORIGIN)
 			.expectHeader().valueMatches(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, ".*POST.*")
-			.expectHeader().valueMatches(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, ".*Authorization.*");
+			.expectHeader().valueMatches(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, ".*Authorization.*")
+			.expectHeader().exists(CORRELATION_ID_HEADER);
 	}
 
 	@Test
@@ -69,6 +72,20 @@ class ApiGatewayApplicationTests {
 			.exchange()
 			.expectStatus().isOk()
 			.expectHeader().valueEquals(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, TEST_ORIGIN)
+			.expectHeader().valueMatches(CORRELATION_ID_HEADER, ".+")
 			.expectBody(String.class).isEqualTo("{\"token\":\"ok\"}");
+	}
+
+	@Test
+	void shouldPreserveIncomingCorrelationId() {
+		String correlationId = "corr-12345";
+
+		webTestClient().post()
+			.uri("/book-store/api/user/login")
+			.header(HttpHeaders.ORIGIN, TEST_ORIGIN)
+			.header(CORRELATION_ID_HEADER, correlationId)
+			.exchange()
+			.expectStatus().isOk()
+			.expectHeader().valueEquals(CORRELATION_ID_HEADER, correlationId);
 	}
 }

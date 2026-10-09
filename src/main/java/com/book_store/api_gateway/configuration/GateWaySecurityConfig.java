@@ -16,10 +16,9 @@ public class GateWaySecurityConfig {
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(auth -> auth
                         .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .pathMatchers("/book-store/api/user/register",
-                                "/book-store/api/user/login",
-                                "/actuator/**", "/book-store/api/catalog/books/**", "/book-store/api/catalog/books/*/images/**"
-                        ).permitAll()
+                        .pathMatchers("/book-store/api/user/**").permitAll()
+                        .pathMatchers(HttpMethod.GET, "/book-store/api/catalog/**").permitAll()
+                        .pathMatchers("/book-store/api/carts/**").authenticated()
                         .anyExchange().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .build();

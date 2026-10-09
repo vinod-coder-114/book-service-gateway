@@ -15,5 +15,5 @@ services:
 networks:
   bookstore-net:
     external: true
-    name: user-service_bookstore-net
+    name: book-store-user-service_bookstore-net
 

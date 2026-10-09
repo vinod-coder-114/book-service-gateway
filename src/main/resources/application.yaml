@@ -17,10 +17,18 @@ spring:
                 - Path=/book-store/api/user/**
               filters:
                 - RewritePath=/book-store/(?<segment>.*), /$\{segment}
+
             - id: catalog-service
               uri: ${CATALOG_SERVICE_URL:http://catalog-service:8082}
               predicates:
                   - Path=/book-store/api/catalog/**
+              filters:
+                  -  RewritePath=/book-store/(?<segment>.*), /$\{segment}
+
+            - id: cart-service
+              uri: ${CART_SERVICE_URL:http://book-store-cart-service:9090}
+              predicates:
+                  - Path=/book-store/api/carts/**
               filters:
                   -  RewritePath=/book-store/(?<segment>.*), /$\{segment}
 

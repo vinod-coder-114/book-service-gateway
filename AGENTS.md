@@ -4,8 +4,9 @@
 Implement features and enhancements for this repository as a senior Spring Boot engineer using a strict phase-gated workflow.
 
 ## Scope
-- Spring Boot 3 / Java 21 changes in this project.
+- Spring Boot 4.x / Java 21 changes in this project.
 - API Gateway features (routing, filters, CORS, security, config, observability).
+- Integration-facing gateway changes for workspace services (user-service auth/JWT, catalog-service, cart-service, eureka discovery) via routes/contracts only.
 - Refactors and bug fixes with tests.
 
 ## Operating Model (Mandatory 3 Phases)
